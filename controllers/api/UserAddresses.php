@@ -2,8 +2,11 @@
 
 use Exception;
 use Kharanenka\Helper\Result;
+use Lang;
 use Lovata\Buddies\Models\User;
-use Lovata\OrdersShopaholic\Components\UserAddress;
+use Lovata\Ordersshopaholic\Models\UserAddress;
+use Lovata\OrdersShopaholic\Models\UserAddress as UserAddressModel;
+use Lovata\Toolbox\Classes\Helper\UserHelper;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\IndexCollection;
 use PlanetaDelEste\ApiToolbox\Classes\Api\Base;
 
@@ -12,14 +15,31 @@ class UserAddresses extends Base
     /**
      * Get current user addresses
      *
+     * @param int|string $iUserId
+     *
      * @return array|\Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function address()
+    public function address($iUserId = null)
     {
         try {
             $this->currentUser();
-            $arAddress = $this->user->address ? IndexCollection::make(collect($this->user->address)) : [];
+            $obUser = $this->user;
+            if ($iUserId && $this->userInGroup('admin')) {
+                $obUser = User::active()->find($iUserId);
+            }
+
+            if (!$obUser) {
+                return Result::setFalse()->get();
+            }
+
+            $obAddress = UserAddressModel::getByUser($obUser->id)
+                ->where(function($obQuery) {
+                    return $obQuery->whereNotNull('street')->orWhereNotNull('address1');
+                })
+                ->get()
+            ;
+            $arAddress = IndexCollection::make($obAddress);
 
             return Result::setData($arAddress)->get();
         } catch (Exception $e) {
@@ -33,16 +53,108 @@ class UserAddresses extends Base
      */
     public function addAddress(): array
     {
-        return $this->userAddressComponent()->onAdd();
+        $arAddressData = input();
+        $iUserID = $this->userInGroup('admin')
+            ? array_get($arAddressData, 'user_id')
+            : UserHelper::instance()->getUserId();
+
+        if (empty($arAddressData) || empty($iUserID)) {
+            $sMessage = Lang::get('lovata.toolbox::lang.message.e_not_correct_request');
+            return Result::setFalse()->setMessage($sMessage)->get();
+        }
+
+        $obAddress = UserAddressModel::findAddressByData($arAddressData, $iUserID);
+        if (!empty($obAddress)) {
+            $sMessage = Lang::get('lovata.ordersshopaholic::lang.message.e_address_exists');
+            return Result::setFalse()->setMessage($sMessage)->get();
+        }
+
+        $arAddressData['user_id'] = $iUserID;
+        $this->createAddressObject($arAddressData);
+
+        return Result::get();
+    }
+
+    /**
+     * Create address object
+     *
+     * @param array $arAddressData
+     *
+     * @return array|\Illuminate\Http\JsonResponse|void
+     */
+    public function createAddressObject(array $arAddressData)
+    {
+        if (empty($arAddressData)) {
+            return Result::get();
+        }
+
+        Result::setData(['id' => null]);
+
+        try {
+            $obAddress = UserAddressModel::create($arAddressData);
+
+            if (!empty($obAddress)) {
+                Result::setData(['id' => $obAddress->id]);
+            }
+        } catch (\October\Rain\Database\ModelException $obException) {
+            return static::exceptionResult($obException);
+        }
     }
 
     /**
      * @return array
-     * @throws \SystemException
      */
     public function updateAddress(): array
     {
-        return $this->userAddressComponent()->onUpdate();
+        $arAddressData = input();
+        $iAddressID = array_get($arAddressData, 'id');
+
+        $iUserID = $this->userInGroup('admin')
+            ? array_get($arAddressData, 'user_id')
+            : UserHelper::instance()->getUserId();
+        $obAddress = UserAddressModel::findAddressByData($arAddressData, $iUserID);
+
+        if (empty($arAddressData) || empty($iAddressID) || empty($iUserID)) {
+            $sMessage = Lang::get('lovata.toolbox::lang.message.e_not_correct_request');
+            return Result::setFalse()->setMessage($sMessage)->get();
+        }
+
+        if (!empty($obAddress) && $obAddress->id != $iAddressID) {
+            $sMessage = Lang::get('lovata.ordersshopaholic::lang.message.e_address_exists');
+            return Result::setFalse()->setMessage($sMessage)->get();
+        }
+
+        //Find address object by ID
+        $obAddress = UserAddressModel::getByUser($iUserID)->find($arAddressData['id']);
+        if (empty($obAddress)) {
+            $sMessage = Lang::get('lovata.toolbox::lang.message.e_not_correct_request');
+            return Result::setFalse()->setMessage($sMessage)->get();
+        }
+
+        $this->updateAddressObject($obAddress, $arAddressData);
+
+        return Result::get();
+    }
+
+    /**
+     * Update address object
+     *
+     * @param UserAddressModel $obAddress
+     * @param array            $arAddressData
+     *
+     * @return array|\Illuminate\Http\JsonResponse|void
+     */
+    public function updateAddressObject(UserAddressModel $obAddress, array $arAddressData)
+    {
+        if (empty($obAddress) || empty($arAddressData)) {
+            return Result::get();
+        }
+
+        try {
+            $obAddress->update($arAddressData);
+        } catch (\October\Rain\Database\ModelException $obException) {
+            return static::exceptionResult($obException);
+        }
     }
 
     /**
@@ -52,21 +164,31 @@ class UserAddresses extends Base
      */
     public function removeAddress(): array
     {
+        $arAddressIDList = array_wrap(input('id'));
+        $iUserID = $this->userInGroup('admin')
+            ? input('user_id')
+            : UserHelper::instance()->getUserId();
 
-        return $this->userAddressComponent()->onRemove();
+        if (empty($arAddressIDList) || empty($iUserID)) {
+            $sMessage = Lang::get('lovata.toolbox::lang.message.e_not_correct_request');
+            return Result::setFalse()->setMessage($sMessage)->get();
+        }
+
+        foreach ($arAddressIDList as $iAddressID) {
+            //Find address object by ID
+            $obAddress = UserAddressModel::getByUser($iUserID)->find($iAddressID);
+            if (empty($obAddress)) {
+                continue;
+            }
+
+            $obAddress->delete();
+        }
+
+        return Result::get();
     }
 
     public function getModelClass(): string
     {
-        return User::class;
-    }
-
-    /**
-     * @return \Cms\Classes\ComponentBase|UserAddress
-     * @throws \SystemException
-     */
-    protected function userAddressComponent()
-    {
-        return $this->component(UserAddress::class);
+        return UserAddressModel::class;
     }
 }
