@@ -1,7 +1,7 @@
 <?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order;
 
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\PaymentMethod\PaymentMethodItemResource;
 use PlanetaDelEste\ApiToolbox\Classes\Resource\Base as BaseResource;
-use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\PaymentMethod\ItemResource as ItemResourcePaymentMethod;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Status\ItemResource as ItemResourceStatus;
 use PlanetaDelEste\ApiOrdersShopaholic\Plugin;
 
@@ -27,7 +27,7 @@ class ItemResource extends BaseResource
             'discount_position_total_price_value' => (float)$this->discount_position_total_price_value,
             'status'                              => ItemResourceStatus::make($this->status),
             'payment_method'                      => $this->payment_method
-                ? ItemResourcePaymentMethod::make($this->payment_method)
+                ? PaymentMethodItemResource::make($this->payment_method)
                 : null
         ];
     }
