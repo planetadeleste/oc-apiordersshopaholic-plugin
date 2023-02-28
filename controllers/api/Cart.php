@@ -1,17 +1,23 @@
 <?php namespace PlanetaDelEste\ApiOrdersShopaholic\Controllers\Api;
 
+use Cms\Classes\ComponentBase;
+use Exception;
 use Kharanenka\Helper\Result;
+use Lovata\OrdersShopaholic\Classes\Item\CartPositionItem;
 use Lovata\OrdersShopaholic\Classes\Item\ShippingTypeItem;
 use Lovata\OrdersShopaholic\Components\Cart as CartComponent;
+use Lovata\Shopaholic\Models\Offer;
+use Lovata\Toolbox\Classes\Item\ElementItem;
 use PlanetaDelEste\ApiShopaholic\Classes\Resource\Offer\ShowResource as ShowResourceOffer;
 use PlanetaDelEste\ApiShopaholic\Classes\Resource\Product\ItemResource as ItemResourceProduct;
 use PlanetaDelEste\ApiToolbox\Classes\Api\Base;
+use SystemException;
 
 class Cart extends Base
 {
     /**
      * @return array
-     * @throws \SystemException
+     * @throws SystemException
      */
     public function getData(): array
     {
@@ -20,8 +26,8 @@ class Cart extends Base
 
     /**
      * @return array
-     * @throws \SystemException
-     * @throws \Exception
+     * @throws SystemException
+     * @throws Exception
      */
     public function add(): array
     {
@@ -37,7 +43,7 @@ class Cart extends Base
      * @param int $id
      *
      * @return array
-     * @throws \SystemException
+     * @throws SystemException
      */
     public function update($id = null): array
     {
@@ -50,8 +56,8 @@ class Cart extends Base
     }
 
     /**
-     * @return array|\Lovata\Toolbox\Classes\Item\ElementItem[]
-     * @throws \SystemException
+     * @return array|ElementItem[]
+     * @throws SystemException
      */
     public function remove(): array
     {
@@ -66,9 +72,9 @@ class Cart extends Base
     /**
      * @param int|null $iShippingTypeId
      *
-     * @return array|\Lovata\Toolbox\Classes\Item\ElementItem[]
-     * @throws \SystemException
-     * @throws \Exception
+     * @return array|ElementItem[]
+     * @throws SystemException
+     * @throws Exception
      */
     public function get($iShippingTypeId = null): array
     {
@@ -78,8 +84,8 @@ class Cart extends Base
         if ($obCartPositionCollection->isNotEmpty()) {
             $arCartDataPositions = [];
             foreach ($obCartPositionCollection as $obCartPositionItem) {
-                /** @var \Lovata\OrdersShopaholic\Classes\Item\CartPositionItem $obCartPositionItem */
-                /** @var \Lovata\Shopaholic\Models\Offer $obOfferModel */
+                /** @var CartPositionItem $obCartPositionItem */
+                /** @var Offer $obOfferModel */
 
                 $obOffer = $obCartPositionItem->offer;
 //                $obOfferModel = $obOffer->getObject();
@@ -108,8 +114,8 @@ class Cart extends Base
     }
 
     /**
-     * @return \Cms\Classes\ComponentBase|\Lovata\OrdersShopaholic\Components\Cart
-     * @throws \SystemException
+     * @return ComponentBase|CartComponent
+     * @throws SystemException
      */
     protected function cartComponent()
     {

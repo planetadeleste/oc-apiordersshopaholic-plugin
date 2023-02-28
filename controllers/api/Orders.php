@@ -23,7 +23,7 @@ use PlanetaDelEste\ApiToolbox\Plugin as ApiToolboxPlugin;
  */
 class Orders extends Base
 {
-    public function init()
+    public function init(): void
     {
         $this->bindEvent(
             ApiToolboxPlugin::EVENT_LOCAL_EXTEND_INDEX,
@@ -59,7 +59,8 @@ class Orders extends Base
                 if (empty($arData) || !is_array($arData)) {
                     continue;
                 }
-                $arResultData = array_merge($arResultData, $arData);
+
+                $arResultData += $arData;
             }
 
             Result::setData($arResultData);

@@ -1,14 +1,17 @@
 <?php namespace PlanetaDelEste\ApiOrdersShopaholic\Controllers\Api;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Kharanenka\Helper\Result;
 use Lang;
 use Lovata\Buddies\Models\User;
 use Lovata\Ordersshopaholic\Models\UserAddress;
 use Lovata\OrdersShopaholic\Models\UserAddress as UserAddressModel;
 use Lovata\Toolbox\Classes\Helper\UserHelper;
+use October\Rain\Database\ModelException;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\IndexCollection;
 use PlanetaDelEste\ApiToolbox\Classes\Api\Base;
+use SystemException;
 
 class UserAddresses extends Base
 {
@@ -17,8 +20,8 @@ class UserAddresses extends Base
      *
      * @param int|string $iUserId
      *
-     * @return array|\Illuminate\Http\JsonResponse
-     * @throws \Exception
+     * @return array|JsonResponse
+     * @throws Exception
      */
     public function address($iUserId = null)
     {
@@ -49,7 +52,7 @@ class UserAddresses extends Base
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function addAddress(): array
     {
@@ -80,7 +83,7 @@ class UserAddresses extends Base
      *
      * @param array $arAddressData
      *
-     * @return array|\Illuminate\Http\JsonResponse|void
+     * @return array|JsonResponse|void
      */
     public function createAddressObject(array $arAddressData)
     {
@@ -96,7 +99,7 @@ class UserAddresses extends Base
             if (!empty($obAddress)) {
                 Result::setData(['id' => $obAddress->id]);
             }
-        } catch (\October\Rain\Database\ModelException $obException) {
+        } catch (ModelException $obException) {
             return static::exceptionResult($obException);
         }
     }
@@ -142,7 +145,7 @@ class UserAddresses extends Base
      * @param UserAddressModel $obAddress
      * @param array            $arAddressData
      *
-     * @return array|\Illuminate\Http\JsonResponse|void
+     * @return array|JsonResponse|void
      */
     public function updateAddressObject(UserAddressModel $obAddress, array $arAddressData)
     {
@@ -152,15 +155,15 @@ class UserAddresses extends Base
 
         try {
             $obAddress->update($arAddressData);
-        } catch (\October\Rain\Database\ModelException $obException) {
+        } catch (ModelException $obException) {
             return static::exceptionResult($obException);
         }
     }
 
     /**
      * @return array
-     * @throws \SystemException
-     * @throws \Exception
+     * @throws SystemException
+     * @throws Exception
      */
     public function removeAddress(): array
     {

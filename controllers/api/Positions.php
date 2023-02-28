@@ -28,7 +28,7 @@ class Positions extends Base
                $iOrderId = Order::getBySecretKey($iOrderId)->first(['id'])->id;
            }
 
-           /** @var \Lovata\OrdersShopaholic\Classes\Item\OrderItem $obOrderItem */
+           /** @var OrderItem $obOrderItem */
            $obOrderItem = OrderItem::make($iOrderId);
            if ($obOrderItem) {
                Result::setTrue();
