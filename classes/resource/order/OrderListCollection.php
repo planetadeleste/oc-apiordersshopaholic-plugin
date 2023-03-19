@@ -3,9 +3,9 @@
 /**
  * Class ListCollection
  *
- * @deprecated use OrderListCollection
  * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order
  */
-class ListCollection extends OrderListCollection
+class OrderListCollection extends OrderIndexCollection
 {
+    public $collects = OrderItemResource::class;
 }

@@ -1,2 +1,23 @@
 1.0.0:
     - 'Init plugin'
+1.0.1:
+    - 'Add UserAddress controller/resources'
+    - 'Rename resources event'
+1.0.2:
+    - 'Extend OrderController to be sorted by created date'
+1.0.3:
+    - 'Add status routes'
+1.0.4:
+    - 'Add default sort'
+1.0.5:
+    - 'Add Positions controller'
+1.0.6:
+    - 'Add middleware web to create orders route'
+    - 'Fix loading order id on positions controller'
+1.0.7:
+    - 'User address can be managed from admin user'
+1.0.8:
+    - 'Set PaymentMethod to be used in admin panel'
+1.0.9:
+    - 'New ShippingType api resource'
+    - 'Rename old resources and make as deprecated'

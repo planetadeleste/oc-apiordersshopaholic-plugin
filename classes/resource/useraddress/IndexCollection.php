@@ -1,18 +1,12 @@
 <?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
  * Class IndexCollection
  *
+ * @deprecated Use UserAddressIndexCollection
  * @package PlanetaDelEste\ApiShopaholic\Classes\Resource\UserAddress
  */
-class IndexCollection extends ResourceCollection
+class IndexCollection extends UserAddressIndexCollection
 {
-    public $collects = ShowResource::class;
-
-    public function toArray($request)
-    {
-        return $this->collection;
-}
 }

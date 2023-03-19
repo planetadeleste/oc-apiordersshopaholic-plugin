@@ -3,9 +3,9 @@
 /**
  * Class ListCollection
  *
+ * @deprecated Use UserAddressListCollection
  * @package PlanetaDelEste\ApiShopaholic\Classes\Resource\UserAddress
  */
-class ListCollection extends IndexCollection
+class ListCollection extends UserAddressListCollection
 {
-    public $collects = ItemResource::class;
 }

@@ -5,9 +5,14 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 /**
  * Class IndexCollection
  *
- * @deprecated Use OrderPositionIndexCollection
  * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition
  */
-class IndexCollection extends OrderPositionIndexCollection
+class OrderPositionIndexCollection extends ResourceCollection
 {
+    public $collects = OrderPositionShowResource::class;
+
+    public function toArray($request)
+    {
+        return $this->collection;
+    }
 }

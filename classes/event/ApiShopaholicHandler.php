@@ -4,11 +4,13 @@ use Lovata\OrdersShopaholic\Classes\Collection\CartPositionCollection;
 use Lovata\OrdersShopaholic\Classes\Collection\OrderCollection;
 use Lovata\OrdersShopaholic\Classes\Collection\OrderPositionCollection;
 use Lovata\OrdersShopaholic\Classes\Collection\PaymentMethodCollection;
+use Lovata\OrdersShopaholic\Classes\Collection\ShippingTypeCollection;
 use Lovata\OrdersShopaholic\Classes\Collection\StatusCollection;
 use Lovata\OrdersShopaholic\Models\CartPosition;
 use Lovata\OrdersShopaholic\Models\Order;
 use Lovata\OrdersShopaholic\Models\OrderPosition;
 use Lovata\OrdersShopaholic\Models\PaymentMethod;
+use Lovata\OrdersShopaholic\Models\ShippingType;
 use Lovata\OrdersShopaholic\Models\Status;
 use October\Rain\Events\Dispatcher;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\IndexCollection;
@@ -28,12 +30,12 @@ class ApiShopaholicHandler
         );
 
         $obEvent->listen(
-            PluginApiShopaholic::EVENT_ITEMRESOURCE_DATA.'.user',
+            PluginApiShopaholic::EVENT_ITEMRESOURCE_DATA . '.user',
             function (ItemResource $obItemResource, $arData) {
                 return [
                     'address' => $obItemResource->address
                         ? IndexCollection::make(collect($obItemResource->address))
-                        : null
+                        : null,
                 ];
             }
         );
@@ -46,7 +48,8 @@ class ApiShopaholicHandler
             Order::class         => OrderCollection::class,
             OrderPosition::class => OrderPositionCollection::class,
             PaymentMethod::class => PaymentMethodCollection::class,
-            Status::class        => StatusCollection::class
+            Status::class        => StatusCollection::class,
+            ShippingType::class  => ShippingTypeCollection::class,
         ];
     }
 }

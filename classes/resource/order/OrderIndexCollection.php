@@ -5,9 +5,14 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 /**
  * Class IndexCollection
  *
- * @deprecated Use OrderIndexCollection
  * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order
  */
-class IndexCollection extends OrderIndexCollection
+class OrderIndexCollection extends ResourceCollection
 {
+    public $collects = OrderShowResource::class;
+
+    public function toArray($request)
+    {
+        return $this->collection;
+    }
 }

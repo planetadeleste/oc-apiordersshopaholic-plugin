@@ -1,11 +1,11 @@
 <?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Status;
 
 /**
- * Class IndexCollection
+ * Class ListCollection
  *
- * @deprecated Use StatusIndexCollection
  * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Status
  */
-class IndexCollection extends StatusIndexCollection
+class StatusListCollection extends StatusIndexCollection
 {
+    public $collects = StatusItemResource::class;
 }

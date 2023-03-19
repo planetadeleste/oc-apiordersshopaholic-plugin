@@ -1,40 +1,15 @@
 <?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\PaymentMethod;
 
+use Lovata\OrdersShopaholic\Classes\Item\PaymentMethodItem;
 use PlanetaDelEste\ApiToolbox\Classes\Resource\Base as BaseResource;
 
 /**
  * Class ItemResource
  *
- * @mixin \Lovata\OrdersShopaholic\Classes\Item\PaymentMethodItem
+ * @deprecated Use PaymentMethodItemResource
+ * @mixin PaymentMethodItem
  * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\PaymentMethod
  */
-class ItemResource extends BaseResource
+class ItemResource extends PaymentMethodItemResource
 {
-
-    /**
-     * @inheritDoc
-     */
-    protected function getEvent(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getData(): array
-    {
-        return [];
-    }
-
-    public function getDataKeys(): array
-    {
-        return [
-            'id',
-            'name',
-            'code',
-            'preview_text',
-            'restriction',
-        ];
-    }
 }

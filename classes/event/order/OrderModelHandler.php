@@ -5,6 +5,7 @@ use Lovata\OrdersShopaholic\Classes\Item\OrderItem;
 use Lovata\Toolbox\Classes\Event\ModelHandler;
 use Lovata\OrdersShopaholic\Models\Order;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\OrderListStore;
+use PlanetaDelEste\ApiToolbox\Traits\Event\ModelHandlerTrait;
 
 /**
  * Class OrderModelHandler
@@ -13,6 +14,8 @@ use PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\OrderListStore;
  */
 class OrderModelHandler extends ModelHandler
 {
+    use ModelHandlerTrait;
+
     /** @var Order */
     protected $obElement;
 
@@ -43,7 +46,7 @@ class OrderModelHandler extends ModelHandler
      *
      * @return string
      */
-    protected function getModelClass()
+    protected function getModelClass(): string
     {
         return Order::class;
     }
@@ -53,7 +56,7 @@ class OrderModelHandler extends ModelHandler
      *
      * @return string
      */
-    protected function getItemClass()
+    protected function getItemClass(): string
     {
         return OrderItem::class;
     }
@@ -73,8 +76,7 @@ class OrderModelHandler extends ModelHandler
      */
     protected function clearBySortingPublished()
     {
-        OrderListStore::instance()->sorting->clear(OrderListStore::SORT_CREATED_AT_ASC);
-        OrderListStore::instance()->sorting->clear(OrderListStore::SORT_CREATED_AT_DESC);
+        $this->clearSorting(['created_at']);
     }
 
     /**
@@ -93,5 +95,10 @@ class OrderModelHandler extends ModelHandler
         parent::afterDelete();
 
         $this->clearBySortingPublished();
+    }
+
+    protected function getStoreClass(): string
+    {
+        return OrderListStore::class;
     }
 }
