@@ -8,6 +8,9 @@ use Lovata\OrdersShopaholic\Components\MakeOrder;
 use Lovata\OrdersShopaholic\Models\Order;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order\IndexCollection;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order\ListCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order\OrderIndexCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order\OrderListCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order\OrderShowResource;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order\ShowResource;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\OrderListStore;
 use PlanetaDelEste\ApiOrdersShopaholic\Plugin;
@@ -104,17 +107,17 @@ class Orders extends Base
 
     public function getIndexResource(): string
     {
-        return IndexCollection::class;
+        return OrderIndexCollection::class;
     }
 
     public function getListResource(): string
     {
-        return ListCollection::class;
+        return OrderListCollection::class;
     }
 
     public function getShowResource(): string
     {
-        return ShowResource::class;
+        return OrderShowResource::class;
     }
 
     public function getPrimaryKey(): string

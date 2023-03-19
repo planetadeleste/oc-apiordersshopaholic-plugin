@@ -4,10 +4,11 @@ use Exception;
 use Kharanenka\Helper\Result;
 use Lovata\OrdersShopaholic\Classes\Item\OrderItem;
 use Lovata\OrdersShopaholic\Models\Order;
-use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition\IndexCollection as OrderPositionIndexCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition\OrderPositionIndexCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition\OrderPositionListCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition\OrderPositionShowResource;
 use PlanetaDelEste\ApiToolbox\Classes\Api\Base;
 use Lovata\OrdersShopaholic\Models\OrderPosition;
-use PlanetaDelEste\ApiToolbox\Plugin as ApiToolboxPlugin;
 
 /**
  * Class Positions
@@ -51,5 +52,20 @@ class Positions extends Base
     public function getSortColumn(): string
     {
         return 'sort';
+    }
+
+    public function getShowResource(): string
+    {
+        return OrderPositionShowResource::class;
+    }
+
+    public function getIndexResource(): string
+    {
+        return OrderPositionIndexCollection::class;
+    }
+
+    public function getListResource(): string
+    {
+        return OrderPositionListCollection::class;
     }
 }

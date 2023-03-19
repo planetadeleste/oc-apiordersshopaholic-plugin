@@ -25,3 +25,5 @@
 1.0.11:
     - 'New ShippingType api resource'
     - 'Rename old resources and make as deprecated'
+1.0.12:
+    - 'Fix resource classes in controllers'

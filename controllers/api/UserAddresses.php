@@ -10,6 +10,9 @@ use Lovata\OrdersShopaholic\Models\UserAddress as UserAddressModel;
 use Lovata\Toolbox\Classes\Helper\UserHelper;
 use October\Rain\Database\ModelException;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\IndexCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\UserAddressIndexCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\UserAddressListCollection;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\UserAddressShowResource;
 use PlanetaDelEste\ApiToolbox\Classes\Api\Base;
 use SystemException;
 
@@ -37,11 +40,10 @@ class UserAddresses extends Base
             }
 
             $obAddress = UserAddressModel::getByUser($obUser->id)
-                ->where(function($obQuery) {
+                ->where(function ($obQuery) {
                     return $obQuery->whereNotNull('street')->orWhereNotNull('address1');
                 })
-                ->get()
-            ;
+                ->get();
             $arAddress = IndexCollection::make($obAddress);
 
             return Result::setData($arAddress)->get();
@@ -57,7 +59,7 @@ class UserAddresses extends Base
     public function addAddress(): array
     {
         $arAddressData = input();
-        $iUserID = $this->userInGroup('admin')
+        $iUserID       = $this->userInGroup('admin')
             ? array_get($arAddressData, 'user_id')
             : UserHelper::instance()->getUserId();
 
@@ -110,9 +112,9 @@ class UserAddresses extends Base
     public function updateAddress(): array
     {
         $arAddressData = input();
-        $iAddressID = array_get($arAddressData, 'id');
+        $iAddressID    = array_get($arAddressData, 'id');
 
-        $iUserID = $this->userInGroup('admin')
+        $iUserID   = $this->userInGroup('admin')
             ? array_get($arAddressData, 'user_id')
             : UserHelper::instance()->getUserId();
         $obAddress = UserAddressModel::findAddressByData($arAddressData, $iUserID);
@@ -168,7 +170,7 @@ class UserAddresses extends Base
     public function removeAddress(): array
     {
         $arAddressIDList = array_wrap(input('id'));
-        $iUserID = $this->userInGroup('admin')
+        $iUserID         = $this->userInGroup('admin')
             ? input('user_id')
             : UserHelper::instance()->getUserId();
 
@@ -193,5 +195,20 @@ class UserAddresses extends Base
     public function getModelClass(): string
     {
         return UserAddressModel::class;
+    }
+
+    public function getShowResource(): string
+    {
+        return UserAddressShowResource::class;
+    }
+
+    public function getIndexResource(): string
+    {
+        return UserAddressIndexCollection::class;
+    }
+
+    public function getListResource(): string
+    {
+        return UserAddressListCollection::class;
     }
 }
