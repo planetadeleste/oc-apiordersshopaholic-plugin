@@ -4,9 +4,10 @@ Route::prefix('api/v1')
     ->middleware(['throttle:120,1', 'bindings'])
     ->group(
         function () {
-            $arRoutes = ['cart','orders', 'profile', 'users'];
-            foreach ($arRoutes as $sPublicRoute) {
-                Route::group([], plugins_path('/planetadeleste/apiordersshopaholic/routes/'.$sPublicRoute.'.php'));
+            $sPath = plugins_path('planetadeleste/apiordersshopaholic/routes');
+            $arFiles = File::glob($sPath . '/*.php');
+            foreach ($arFiles as $sRoute) {
+                Route::group([], $sRoute);
             }
         }
     );
