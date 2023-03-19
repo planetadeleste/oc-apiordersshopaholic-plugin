@@ -30,3 +30,5 @@
 1.0.13:
     - 'Add shippingtypes routes'
     - 'Move paymentmethods routes to your own route file'
+1.0.14:
+    - 'Add shipping_type to order resource'

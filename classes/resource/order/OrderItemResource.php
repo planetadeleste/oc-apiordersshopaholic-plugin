@@ -2,6 +2,7 @@
 
 use Lovata\OrdersShopaholic\Classes\Item\OrderItem;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\PaymentMethod\PaymentMethodItemResource;
+use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\ShippingType\ShippingTypeItemResource;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Status\StatusItemResource;
 use PlanetaDelEste\ApiToolbox\Classes\Resource\Base;
 use PlanetaDelEste\ApiOrdersShopaholic\Plugin;
@@ -30,9 +31,8 @@ class OrderItemResource extends Base
             'old_position_total_price_value'      => (float)$this->old_position_total_price_value,
             'discount_position_total_price_value' => (float)$this->discount_position_total_price_value,
             'status'                              => StatusItemResource::make($this->status),
-            'payment_method'                      => $this->payment_method
-                ? PaymentMethodItemResource::make($this->payment_method)
-                : null,
+            'payment_method'                      => PaymentMethodItemResource::make($this->payment_method),
+            'shipping_type'                       => ShippingTypeItemResource::make($this->shipping_type),
         ];
     }
 

@@ -58,6 +58,7 @@ class OrderShowResource extends OrderItemResource
             'shipping_price_value',
             'shipping_tax_percent',
             'shipping_type_id',
+            'shipping_type',
 
             'status_id',
             'status',
