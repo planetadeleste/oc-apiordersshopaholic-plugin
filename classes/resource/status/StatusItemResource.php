@@ -1,4 +1,6 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Status;
+<?php
+
+namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Status;
 
 use Lovata\OrdersShopaholic\Classes\Item\StatusItem;
 use PlanetaDelEste\ApiShopaholic\Classes\Resource\Offer\ItemResource as ItemResourceOffer;
@@ -19,7 +21,7 @@ class StatusItemResource extends Base
     public function getData(): array
     {
         return [
-            'offer' => ItemResourceOffer::make($this->offer)
+            'user_status' => $this->user_status ? self::make($this->user_status) : null
         ];
     }
 
@@ -27,12 +29,13 @@ class StatusItemResource extends Base
     {
         return [
             'id',
-            'order_id',
-            'quantity',
-            'weight',
-            'height',
-            'length',
-            'width',
+            'code',
+            'name',
+            'is_user_show',
+            'user_status_id',
+            'preview_text',
+            'color',
+            'user_status',
         ];
     }
 
@@ -40,6 +43,6 @@ class StatusItemResource extends Base
     {
         // Paste below code in PlanetaDelEste\ApiOrdersShopaholic\Plugin class
         // const EVENT_ITEMRESOURCE_DATA = 'planetadeleste.apiordersshopaholic.resource.itemData';
-        return Plugin::EVENT_ITEMRESOURCE_DATA.'.orderposition';
+        return Plugin::EVENT_ITEMRESOURCE_DATA . '.status';
     }
 }

@@ -1,4 +1,5 @@
 <?php
+Route::get('shippingtypes/list', 'ShippingTypes@list')->name('shippingtypes.list');
 Route::apiResource('shippingtypes', 'ShippingTypes', ['only' => ['index', 'show']]);
 
 if (has_jwtauth_plugin()) {

@@ -32,3 +32,6 @@
     - 'Move paymentmethods routes to your own route file'
 1.0.14:
     - 'Add shipping_type to order resource'
+1.0.15:
+    - 'Fix Wrong status api resource data'
+    - 'Add property color to status api resource'
