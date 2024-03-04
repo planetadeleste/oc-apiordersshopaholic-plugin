@@ -1,7 +1,10 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Controllers\Api;
+<?php
+
+namespace PlanetaDelEste\ApiOrdersShopaholic\Controllers\Api;
 
 use Cms\Classes\ComponentBase;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Kharanenka\Helper\Result;
 use Lovata\OrdersShopaholic\Classes\Item\CartPositionItem;
 use Lovata\OrdersShopaholic\Classes\Item\ShippingTypeItem;
@@ -42,10 +45,10 @@ class Cart extends Base
     /**
      * @param int $id
      *
-     * @return array
+     * @return JsonResponse|string
      * @throws SystemException
      */
-    public function update($id = null): array
+    public function update($id = null): JsonResponse|string
     {
         $response = $this->cartComponent()->onUpdate();
         if (!input('return_data')) {
@@ -78,9 +81,9 @@ class Cart extends Base
      */
     public function get($iShippingTypeId = null): array
     {
-        $obShippingTypeItem = $iShippingTypeId ? ShippingTypeItem::make($iShippingTypeId) : null;
+        $obShippingTypeItem       = $iShippingTypeId ? ShippingTypeItem::make($iShippingTypeId) : null;
         $obCartPositionCollection = $this->cartComponent()->get($obShippingTypeItem);
-        $arCartData = [];
+        $arCartData               = [];
         if ($obCartPositionCollection->isNotEmpty()) {
             $arCartDataPositions = [];
             foreach ($obCartPositionCollection as $obCartPositionItem) {
@@ -88,7 +91,7 @@ class Cart extends Base
                 /** @var Offer $obOfferModel */
 
                 $obOffer = $obCartPositionItem->offer;
-//                $obOfferModel = $obOffer->getObject();
+                //                $obOfferModel = $obOffer->getObject();
                 $arCartDataPositions[] = [
                     'offer'                => ShowResourceOffer::make($obOffer),
                     'product'              => ItemResourceProduct::make($obOffer->product),

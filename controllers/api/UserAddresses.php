@@ -21,12 +21,12 @@ class UserAddresses extends Base
     /**
      * Get current user addresses
      *
-     * @param int|string $iUserId
+     * @param int|string|null $iUserId
      *
      * @return array|JsonResponse
      * @throws Exception
      */
-    public function address($iUserId = null)
+    public function address(int|string $iUserId = null): JsonResponse|array
     {
         try {
             $this->currentUser();
@@ -44,7 +44,7 @@ class UserAddresses extends Base
                     return $obQuery->whereNotNull('street')->orWhereNotNull('address1');
                 })
                 ->get();
-            $arAddress = IndexCollection::make($obAddress);
+            $arAddress = UserAddressIndexCollection::make($obAddress);
 
             return Result::setData($arAddress)->get();
         } catch (Exception $e) {
