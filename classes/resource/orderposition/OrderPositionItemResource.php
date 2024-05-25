@@ -19,21 +19,23 @@ class OrderPositionItemResource extends Base
     public function getData(): array
     {
         return [
-            'offer' => ItemResourceOffer::make($this->offer)
-        ];
+                'offer' => ItemResourceOffer::make($this->offer),
+               ];
     }
 
     public function getDataKeys(): array
     {
         return [
-            'id',
-            'order_id',
-            'quantity',
-            'weight',
-            'height',
-            'length',
-            'width',
-        ];
+                'id',
+                'order_id',
+                'item_id',
+                'item_type',
+                'quantity',
+                'weight',
+                'height',
+                'length',
+                'width',
+               ];
     }
 
     protected function getEvent(): string

@@ -30,9 +30,9 @@ class OrderItemResource extends Base
             'position_total_price_value'          => (float)$this->position_total_price_value,
             'old_position_total_price_value'      => (float)$this->old_position_total_price_value,
             'discount_position_total_price_value' => (float)$this->discount_position_total_price_value,
-            'status'                              => StatusItemResource::make($this->status),
-            'payment_method'                      => PaymentMethodItemResource::make($this->payment_method),
-            'shipping_type'                       => ShippingTypeItemResource::make($this->shipping_type),
+            'status'                              => $this->status?->id ? StatusItemResource::make($this->status) : null,
+            'payment_method'                      => $this->payment_method?->id ? PaymentMethodItemResource::make($this->payment_method) : null,
+            'shipping_type'                       => $this->shipping_type?->id ? ShippingTypeItemResource::make($this->shipping_type) : null,
         ];
     }
 
