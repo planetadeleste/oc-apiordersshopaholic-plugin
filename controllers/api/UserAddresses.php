@@ -1,15 +1,15 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Controllers\Api;
+<?php
+
+namespace PlanetaDelEste\ApiOrdersShopaholic\Controllers\Api;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Kharanenka\Helper\Result;
 use Lang;
 use Lovata\Buddies\Models\User;
-use Lovata\Ordersshopaholic\Models\UserAddress;
 use Lovata\OrdersShopaholic\Models\UserAddress as UserAddressModel;
 use Lovata\Toolbox\Classes\Helper\UserHelper;
 use October\Rain\Database\ModelException;
-use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\IndexCollection;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\UserAddressIndexCollection;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\UserAddressListCollection;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\UserAddress\UserAddressShowResource;
@@ -21,16 +21,18 @@ class UserAddresses extends Base
     /**
      * Get current user addresses
      *
-     * @param int|string|null $iUserId
+     * @param integer|string|null $iUserId
      *
      * @return array|JsonResponse
+     *
      * @throws Exception
      */
-    public function address(int|string $iUserId = null): JsonResponse|array
+    public function address(int|string|null $iUserId = null): JsonResponse|array
     {
         try {
             $this->currentUser();
             $obUser = $this->user;
+
             if ($iUserId && $this->userInGroup('admin')) {
                 $obUser = User::active()->find($iUserId);
             }
@@ -40,7 +42,7 @@ class UserAddresses extends Base
             }
 
             $obAddress = UserAddressModel::getByUser($obUser->id)
-                ->where(function ($obQuery) {
+                ->where(static function ($obQuery) {
                     return $obQuery->whereNotNull('street')->orWhereNotNull('address1');
                 })
                 ->get();
@@ -54,6 +56,7 @@ class UserAddresses extends Base
 
     /**
      * @return array
+     *
      * @throws Exception
      */
     public function addAddress(): array
@@ -65,12 +68,15 @@ class UserAddresses extends Base
 
         if (empty($arAddressData) || empty($iUserID)) {
             $sMessage = Lang::get('lovata.toolbox::lang.message.e_not_correct_request');
+
             return Result::setFalse()->setMessage($sMessage)->get();
         }
 
         $obAddress = UserAddressModel::findAddressByData($arAddressData, $iUserID);
+
         if (!empty($obAddress)) {
             $sMessage = Lang::get('lovata.ordersshopaholic::lang.message.e_address_exists');
+
             return Result::setFalse()->setMessage($sMessage)->get();
         }
 
@@ -121,18 +127,22 @@ class UserAddresses extends Base
 
         if (empty($arAddressData) || empty($iAddressID) || empty($iUserID)) {
             $sMessage = Lang::get('lovata.toolbox::lang.message.e_not_correct_request');
+
             return Result::setFalse()->setMessage($sMessage)->get();
         }
 
         if (!empty($obAddress) && $obAddress->id != $iAddressID) {
             $sMessage = Lang::get('lovata.ordersshopaholic::lang.message.e_address_exists');
+
             return Result::setFalse()->setMessage($sMessage)->get();
         }
 
-        //Find address object by ID
+        // Find address object by ID
         $obAddress = UserAddressModel::getByUser($iUserID)->find($arAddressData['id']);
+
         if (empty($obAddress)) {
             $sMessage = Lang::get('lovata.toolbox::lang.message.e_not_correct_request');
+
             return Result::setFalse()->setMessage($sMessage)->get();
         }
 
@@ -164,6 +174,7 @@ class UserAddresses extends Base
 
     /**
      * @return array
+     *
      * @throws SystemException
      * @throws Exception
      */
@@ -176,12 +187,14 @@ class UserAddresses extends Base
 
         if (empty($arAddressIDList) || empty($iUserID)) {
             $sMessage = Lang::get('lovata.toolbox::lang.message.e_not_correct_request');
+
             return Result::setFalse()->setMessage($sMessage)->get();
         }
 
         foreach ($arAddressIDList as $iAddressID) {
-            //Find address object by ID
+            // Find address object by ID
             $obAddress = UserAddressModel::getByUser($iUserID)->find($iAddressID);
+
             if (empty($obAddress)) {
                 continue;
             }
