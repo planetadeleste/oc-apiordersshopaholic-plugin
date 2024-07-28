@@ -39,3 +39,6 @@
     - 'Update composer.json to toolbox 2.x'
 2.0.1:
     - 'Fix missing keys on api resources'
+2.0.2:
+    - 'Add address api route'
+    - 'Set cast totals on position'
