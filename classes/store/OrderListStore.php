@@ -1,17 +1,18 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Store;
+<?php
 
-use Lovata\Toolbox\Classes\Store\AbstractListStore;
+namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Store;
+
+use Lovata\OrdersShopaholic\Classes\Store\OrderListStore as ShopaholicOrderListStore;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\Order\SortingListStore;
 
 /**
  * Class OrderListStore
  *
- * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Store
  * @property SortingListStore $sorting
  */
-class OrderListStore extends AbstractListStore
+class OrderListStore extends ShopaholicOrderListStore
 {
-    const SORT_CREATED_AT_ASC = 'created_at|asc';
+    const SORT_CREATED_AT_ASC  = 'created_at|asc';
     const SORT_CREATED_AT_DESC = 'created_at|desc';
 
     protected static $instance;
@@ -19,8 +20,9 @@ class OrderListStore extends AbstractListStore
     /**
      * Init store method
      */
-    protected function init()
+    protected function init(): void
     {
+        parent::init();
         $this->addToStoreList('sorting', SortingListStore::class);
     }
 }

@@ -42,3 +42,8 @@
 2.0.2:
     - 'Add address api route'
     - 'Set cast totals on position'
+2.0.3:
+    - 'Extend list store from shopaholic orders plugin'
+    - 'Add description to api controller'
+    - 'Improve api item resource'
+    - 'Extend collection to add sort method'

@@ -1,14 +1,13 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\Order;
+<?php
 
-use Lovata\Toolbox\Classes\Store\AbstractStoreWithParam;
+namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\Order;
+
 use Lovata\OrdersShopaholic\Models\Order;
-use PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\OrderListStore;
+use Lovata\Toolbox\Classes\Store\AbstractStoreWithParam;
 use PlanetaDelEste\ApiToolbox\Traits\Store\SortingListTrait;
 
 /**
  * Class SortingListStore
- *
- * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\Order
  */
 class SortingListStore extends AbstractStoreWithParam
 {
@@ -18,9 +17,6 @@ class SortingListStore extends AbstractStoreWithParam
 
     public $arListFromDB = ['created_at'];
 
-    /**
-     * @inheritDoc
-     */
     protected function getModelClass(): string
     {
         return Order::class;

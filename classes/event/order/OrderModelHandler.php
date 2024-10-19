@@ -1,44 +1,68 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Event\Order;
+<?php
+
+namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Event\Order;
 
 use Lovata\OrdersShopaholic\Classes\Collection\OrderCollection;
 use Lovata\OrdersShopaholic\Classes\Item\OrderItem;
-use Lovata\Toolbox\Classes\Event\ModelHandler;
 use Lovata\OrdersShopaholic\Models\Order;
+use Lovata\Toolbox\Classes\Event\ModelHandler;
 use PlanetaDelEste\ApiOrdersShopaholic\Classes\Store\OrderListStore;
 use PlanetaDelEste\ApiToolbox\Traits\Event\ModelHandlerTrait;
 
 /**
  * Class OrderModelHandler
- *
- * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Event\Order
  */
 class OrderModelHandler extends ModelHandler
 {
     use ModelHandlerTrait;
 
-    /** @var Order */
+    /**
+     * @var Order
+     */
     protected $obElement;
 
-    public function subscribe($obEvent)
+    public function subscribe($obEvent): void
     {
         parent::subscribe($obEvent);
 
         OrderCollection::extend(
-            function ($obCollection) {
+            function ($obCollection): void {
                 $this->extendCollection($obCollection);
+            }
+        );
+
+        Order::extend(
+            function ($obModel): void {
+                $this->extendModel($obModel);
             }
         );
     }
 
-    protected function extendCollection(OrderCollection $obCollection)
+    /**
+     * @param OrderCollection $obCollection
+     *
+     * @return void
+     */
+    protected function extendCollection(OrderCollection $obCollection): void
     {
         $obCollection->addDynamicMethod(
             'sort',
-            function ($sSort = OrderListStore::SORT_CREATED_AT_DESC) use ($obCollection) {
+            static function ($sSort = OrderListStore::SORT_CREATED_AT_DESC) use ($obCollection) {
                 $arResultIDList = OrderListStore::instance()->sorting->get($sSort);
+
                 return $obCollection->applySorting($arResultIDList);
             }
         );
+    }
+
+    /**
+     * @param Order $obModel
+     *
+     * @return void
+     */
+    protected function extendModel(Order $obModel): void
+    {
+        $obModel->addCachedField(['description']);
     }
 
     /**
@@ -64,7 +88,7 @@ class OrderModelHandler extends ModelHandler
     /**
      * After create event handler
      */
-    protected function afterCreate()
+    protected function afterCreate(): void
     {
         parent::afterCreate();
 
@@ -74,7 +98,7 @@ class OrderModelHandler extends ModelHandler
     /**
      * Clear cache by created_at
      */
-    protected function clearBySortingPublished()
+    protected function clearBySortingPublished(): void
     {
         $this->clearSorting(['created_at']);
     }
@@ -82,7 +106,7 @@ class OrderModelHandler extends ModelHandler
     /**
      * After save event handler
      */
-    protected function afterSave()
+    protected function afterSave(): void
     {
         parent::afterSave();
     }
@@ -90,13 +114,16 @@ class OrderModelHandler extends ModelHandler
     /**
      * After delete event handler
      */
-    protected function afterDelete()
+    protected function afterDelete(): void
     {
         parent::afterDelete();
 
         $this->clearBySortingPublished();
     }
 
+    /**
+     * @return string
+     */
     protected function getStoreClass(): string
     {
         return OrderListStore::class;

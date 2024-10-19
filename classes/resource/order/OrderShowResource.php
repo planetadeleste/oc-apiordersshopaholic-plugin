@@ -1,4 +1,6 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order;
+<?php
+
+namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order;
 
 use Lovata\OrdersShopaholic\Classes\Item\OrderItem;
 
@@ -6,12 +8,13 @@ use Lovata\OrdersShopaholic\Classes\Item\OrderItem;
  * Class ShowResource
  *
  * @mixin OrderItem
- * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\Order
  */
 class OrderShowResource extends OrderItemResource
 {
-    public function getDataKeys()
-    : array
+    /**
+     * @return array<string>
+     */
+    public function getDataKeys(): array
     {
         return [
             'id',
@@ -20,6 +23,7 @@ class OrderShowResource extends OrderItemResource
             'property',
             'secret_key',
             'weight',
+            'description',
 
             'currency_id',
             'currency_symbol',
