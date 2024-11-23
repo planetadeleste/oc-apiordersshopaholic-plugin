@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Kharanenka\Helper\Result;
 use Lovata\OrdersShopaholic\Classes\Item\CartPositionItem;
 use Lovata\OrdersShopaholic\Classes\Item\ShippingTypeItem;
+use Lovata\OrdersShopaholic\Classes\Processor\CartProcessor;
+use Lovata\OrdersShopaholic\Classes\Processor\OfferCartPositionProcessor;
 use Lovata\OrdersShopaholic\Components\Cart as CartComponent;
 use Lovata\Shopaholic\Models\Offer;
 use Lovata\Toolbox\Classes\Item\ElementItem;
@@ -20,6 +22,7 @@ class Cart extends Base
 {
     /**
      * @return array
+     *
      * @throws SystemException
      */
     public function getData(): array
@@ -28,7 +31,18 @@ class Cart extends Base
     }
 
     /**
+     * @return ComponentBase|CartComponent
+     *
+     * @throws SystemException
+     */
+    protected function cartComponent()
+    {
+        return $this->component(CartComponent::class);
+    }
+
+    /**
      * @return array
+     *
      * @throws SystemException
      * @throws Exception
      */
@@ -43,39 +57,10 @@ class Cart extends Base
     }
 
     /**
-     * @param int $id
-     *
-     * @return JsonResponse|string
-     * @throws SystemException
-     */
-    public function update($id = null): JsonResponse|string
-    {
-        $response = $this->cartComponent()->onUpdate();
-        if (!input('return_data')) {
-            return $this->get();
-        }
-
-        return $response;
-    }
-
-    /**
-     * @return array|ElementItem[]
-     * @throws SystemException
-     */
-    public function remove(): array
-    {
-        $response = $this->cartComponent()->onRemove();
-        if (!input('return_data')) {
-            return $this->get();
-        }
-
-        return $response;
-    }
-
-    /**
      * @param int|null $iShippingTypeId
      *
      * @return array|ElementItem[]
+     *
      * @throws SystemException
      * @throws Exception
      */
@@ -84,15 +69,16 @@ class Cart extends Base
         $obShippingTypeItem       = $iShippingTypeId ? ShippingTypeItem::make($iShippingTypeId) : null;
         $obCartPositionCollection = $this->cartComponent()->get($obShippingTypeItem);
         $arCartData               = [];
+
         if ($obCartPositionCollection->isNotEmpty()) {
             $arCartDataPositions = [];
+
             foreach ($obCartPositionCollection as $obCartPositionItem) {
                 /** @var CartPositionItem $obCartPositionItem */
-                /** @var Offer $obOfferModel */
 
-                $obOffer = $obCartPositionItem->offer;
-                //                $obOfferModel = $obOffer->getObject();
+                $obOffer               = $obCartPositionItem->offer;
                 $arCartDataPositions[] = [
+                    'id'                   => $obCartPositionItem->id,
                     'offer'                => ShowResourceOffer::make($obOffer),
                     'product'              => ItemResourceProduct::make($obOffer->product),
                     'price'                => $obOffer->price,
@@ -102,6 +88,7 @@ class Cart extends Base
                     'quantity'             => $obCartPositionItem->quantity,
                     'price_per_unit'       => $obCartPositionItem->price_per_unit,
                     'price_per_unit_value' => $obCartPositionItem->price_per_unit_value,
+                    'property'             => $obCartPositionItem->property,
                 ];
             }
 
@@ -117,11 +104,45 @@ class Cart extends Base
     }
 
     /**
-     * @return ComponentBase|CartComponent
+     * @param int $id
+     *
      * @throws SystemException
      */
-    protected function cartComponent()
+    public function update($id = null): JsonResponse|string
     {
-        return $this->component(CartComponent::class);
+        $arRequestData = input('cart');
+
+        CartProcessor::instance()->update($arRequestData, OfferCartPositionProcessor::class);
+        Result::setData(CartProcessor::instance()->getCartData());
+
+        if (!input('return_data')) {
+            Result::setData($this->get());
+        }
+
+        return Result::getJSON();
+    }
+
+    /**
+     * @return array|ElementItem[]
+     *
+     * @throws SystemException
+     */
+    public function remove(): array
+    {
+        $arRequestData = input('cart');
+        $sType = input('type', 'offer');
+
+        if(!CartProcessor::instance()->remove($arRequestData, OfferCartPositionProcessor::class, $sType)) {
+            return Result::get();
+        }
+
+        Result::setData(CartProcessor::instance()->getCartData());
+        $response = Result::get();
+
+        if (!input('return_data')) {
+            return $this->get();
+        }
+
+        return $response;
     }
 }
