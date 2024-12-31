@@ -10,20 +10,25 @@ use System\Classes\PluginBase;
 
 /**
  * Class Plugin
- * @package PlanetaDelEste\ApiOrdersShopaholic
  */
 class Plugin extends PluginBase
 {
-    public const EVENT_ITEMRESOURCE_DATA = 'planetadeleste.apiordersshopaholic.resource.itemData';
-    public const EVENT_API_ORDER_RESPONSE_DATA = 'planetadeleste.apiordersshopaholic.apiOrderResponseData';
-    public const EVENT_API_GATEWAY_IPN_RESPONSE = 'planetadeleste.apiordersshopaholic.apiGatewayIpnResponse';
+    public const string EVENT_ITEMRESOURCE_DATA        = 'planetadeleste.apiordersshopaholic.resource.itemData';
+    public const string EVENT_API_ORDER_RESPONSE_DATA  = 'planetadeleste.apiordersshopaholic.apiOrderResponseData';
+    public const string EVENT_API_GATEWAY_IPN_RESPONSE = 'planetadeleste.apiordersshopaholic.apiGatewayIpnResponse';
 
+    /**
+     * @var array<string>
+     */
     public $require = [
         'Lovata.OrdersShopaholic',
         'PlanetaDelEste.ApiToolbox'
     ];
 
-    public function boot()
+    /**
+     * @return void
+     */
+    public function boot(): void
     {
         $arClasses = [
             ApiShopaholicHandler::class,
