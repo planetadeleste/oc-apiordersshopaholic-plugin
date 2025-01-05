@@ -47,3 +47,5 @@
     - 'Add description to api controller'
     - 'Improve api item resource'
     - 'Extend collection to add sort method'
+2.0.4:
+    - 'Add id and property items to cart positions'
