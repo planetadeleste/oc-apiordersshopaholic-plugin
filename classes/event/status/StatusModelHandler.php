@@ -20,7 +20,7 @@ class StatusModelHandler extends ModelHandler
         parent::subscribe($obEvent);
 
         Status::extend(function (Status $obModel) {
-            $obModel->addCachedField('color');
+            $obModel->addCachedField(['color', 'created_at', 'updated_at']);
         });
     }
 

@@ -29,6 +29,8 @@ class PaymentMethodItemResource extends Base
             'code',
             'preview_text',
             'restriction',
+            'created_at',
+            'updated_at',
         ];
     }
 

@@ -36,6 +36,8 @@ class StatusItemResource extends Base
             'preview_text',
             'color',
             'user_status',
+            'created_at',
+            'updated_at',
         ];
     }
 

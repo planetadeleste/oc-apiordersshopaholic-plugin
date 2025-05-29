@@ -65,6 +65,8 @@ class UserAddressItemResource extends Base
             'address1',
             'address2',
             'postcode',
+            'created_at',
+            'updated_at',
         ];
     }
 

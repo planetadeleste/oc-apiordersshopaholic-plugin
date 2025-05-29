@@ -1,14 +1,17 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition;
+<?php
+
+namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition;
 
 use Lovata\OrdersShopaholic\Classes\Item\OrderPositionItem;
+use PlanetaDelEste\ApiOrdersShopaholic\Plugin;
 use PlanetaDelEste\ApiShopaholic\Classes\Resource\Offer\ItemResource as ItemResourceOffer;
 use PlanetaDelEste\ApiToolbox\Classes\Resource\Base;
-use PlanetaDelEste\ApiOrdersShopaholic\Plugin;
 
 /**
  * Class ItemResource
  *
  * @mixin OrderPositionItem
+ *
  * @package PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition
  */
 class OrderPositionItemResource extends Base
@@ -19,23 +22,25 @@ class OrderPositionItemResource extends Base
     public function getData(): array
     {
         return [
-                'offer' => ItemResourceOffer::make($this->offer),
-               ];
+            'offer' => ItemResourceOffer::make($this->offer),
+        ];
     }
 
     public function getDataKeys(): array
     {
         return [
-                'id',
-                'order_id',
-                'item_id',
-                'item_type',
-                'quantity',
-                'weight',
-                'height',
-                'length',
-                'width',
-               ];
+            'id',
+            'order_id',
+            'item_id',
+            'item_type',
+            'quantity',
+            'weight',
+            'height',
+            'length',
+            'width',
+            'created_at',
+            'updated_at',
+        ];
     }
 
     protected function getEvent(): string

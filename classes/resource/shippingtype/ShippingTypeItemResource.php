@@ -32,7 +32,8 @@ class ShippingTypeItemResource extends Base
             'preview_text',
             'property',
             'api_class',
-
+            'created_at',
+            'updated_at',
         ];
     }
 
