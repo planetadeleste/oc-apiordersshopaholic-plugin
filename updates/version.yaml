@@ -49,3 +49,5 @@
     - 'Extend collection to add sort method'
 2.0.4:
     - 'Add id and property items to cart positions'
+2.0.5:
+    - 'Add created_at and updated_at fields to various resource item classes'
