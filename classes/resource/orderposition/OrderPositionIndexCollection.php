@@ -1,6 +1,8 @@
-<?php namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition;
+<?php
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+namespace PlanetaDelEste\ApiOrdersShopaholic\Classes\Resource\OrderPosition;
+
+use PlanetaDelEste\ApiToolbox\Classes\Resource\ResourceCollection;
 
 /**
  * Class IndexCollection

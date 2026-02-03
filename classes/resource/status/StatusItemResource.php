@@ -20,9 +20,8 @@ class StatusItemResource extends Base
      */
     public function getData(): array
     {
-        return [
-            'user_status' => $this->user_status ? self::make($this->user_status) : null
-        ];
+        // Prevent infinite recursion: don't serialize nested user_status
+        return [];
     }
 
     public function getDataKeys(): array
