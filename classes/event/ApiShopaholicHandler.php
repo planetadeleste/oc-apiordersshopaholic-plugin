@@ -24,7 +24,7 @@ use PlanetaDelEste\ApiToolbox\Plugin;
 
 class ApiShopaholicHandler
 {
-    public function subscribe(Dispatcher $obEvent): void
+    public function subscribe($obEvent): void
     {
         $obEvent->listen(
             Plugin::EVENT_API_ADD_COLLECTION,
